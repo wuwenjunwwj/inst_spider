@@ -31,3 +31,14 @@ class redis_client(object):
     def start(self):
         
         pass
+#redis_handler = redis_handler('localhost', 6379, 0)
+#redis_handler.connect_db()
+#pipe = redis_handler.r.pipeline()
+#for key in redis_handler.r.scan_iter(match='*', count=100000):
+#    print key
+#value = ''
+#with open('seed_file', 'r') as f:
+#    for line in f.readlines():
+#        key = line.strip()
+#        redis_handler.write(key,key)
+

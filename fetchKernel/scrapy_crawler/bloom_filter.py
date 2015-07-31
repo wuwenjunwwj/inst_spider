@@ -3,6 +3,12 @@ from scrapy.utils.request import request_fingerprint
 from scrapy.dupefilters import  BaseDupeFilter
 from scrapy.utils.request import request_fingerprint
 import logging
+
+#################
+#
+#overwrite request_seen method
+#
+################
 class URIBloomFilter(BaseDupeFilter):
     def __init__(self, settings, debug = False):
         self.capacity = settings.getint("DUPEFILTER_CAPACITY")
@@ -16,7 +22,6 @@ class URIBloomFilter(BaseDupeFilter):
     def from_settings(cls, settings):
         debug = settings.getbool('DUPEFILTER_DEBUG')
         return cls(settings, debug)
-    
     def request_seen(self, request):
         fp = self.request_fingerprint(request)
         if self.check(fp):

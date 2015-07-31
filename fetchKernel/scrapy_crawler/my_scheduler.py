@@ -16,11 +16,9 @@ from scrapy.http import Request
 from queuelib import PriorityQueue
 logger = logging.getLogger(__name__)
 
-def test():
-    print "----------------------just for test-------------------------"
 
 class my_Scheduler(Scheduler):
-    def __init__(self, dupefilter, jobdir=None, dqclass=None, mqclass=None, logunser=False, stats=None,run_as_daemon=False):
+    def __init__(self, crawler, dupefilter, jobdir=None, dqclass=None, mqclass=None, logunser=False, stats=None,run_as_daemon=False):
         self.df = dupefilter
         self.dqdir = self._dqdir(jobdir)
         self.dqclass = dqclass
@@ -33,23 +31,18 @@ class my_Scheduler(Scheduler):
         #Scheduler.__init__(self, dupefilter, jobdir, dqclass, mqclass, logunser, stats)
         self.redis_handler = redis_handler('localhost', 6379, 0)
         self.redis_handler.connect_db()
+        crawler.signals.connect(self.enqueue, signal=signals.request_scheduled)
     @classmethod
     def from_crawler(cls, crawler):
         settings = crawler.settings
         run_as_daemon = settings.get('DAEMON')
-        if(run_as_daemon):
-            crawler.signals.connect(test, signal=signals.spider_idle)
         dupefilter_cls = load_object(settings['DUPEFILTER_CLASS'])
         dupefilter = dupefilter_cls.from_settings(settings)
         dqclass = load_object(settings['SCHEDULER_DISK_QUEUE'])
         mqclass = load_object(settings['SCHEDULER_MEMORY_QUEUE'])
         logunser = settings.getbool('LOG_UNSERIALIZABLE_REQUESTS')
-        return cls(dupefilter, job_dir(settings), dqclass, mqclass, logunser, crawler.stats, run_as_daemon)
-    #def has_pending_requests(self):
-    #    if(self.run_as_daemon):
-    #        return len(self) >= 0
-    #    else:
-    #        return len(self) > 0
+        return cls(crawler, dupefilter, job_dir(settings), dqclass, mqclass, logunser, crawler.stats, run_as_daemon)
+    
     def open(self, spider):
         self.spider = spider
         self.mqs = PriorityQueue(self._newmq)
@@ -64,39 +57,19 @@ class my_Scheduler(Scheduler):
             with open(join(self.dqdir, 'active.json'), 'w') as f:
                 json.dump(prios, f)
         return self.df.close(reason)
+
+    def schedule_next_request(self):
+        """Schedules a request if available"""
+        dont_filter=True
+        for key in self.redis_handler.r.scan_iter(match='*', count=1):
+            print key
+            return Request(key, dont_filter)
     def enqueue(self):
-        #while(1):
-        #value = 'http://www.wuwenjuncsdn.net'
-        value = 'http://www.baidu.com'
-        print "---------------------baidu.com in queue"
-            #value = self.redis_handler.read('key-wwj')
-        dont_filter = True
-        request = Request(value, dont_filter)
-        ret = self.enqueue_request(request)
-        time.sleep(1)
-        value = 'https://www.baidu.com/s?wd=11&ie=utf-8&cl=3&t=12&fr=news'
-        request = Request(value, dont_filter)
-        ret = self.enqueue_request(request)
-        value = 'https://www.baidu.com/s?wd=12&ie=utf-8&cl=3&t=12&fr=news'
-        request = Request(value, dont_filter)
-        ret = self.enqueue_request(request)
-        value = 'https://www.baidu.com/s?wd=13&ie=utf-8&cl=3&t=12&fr=news'
-        request = Request(value, dont_filter)
-        value = 'https://www.baidu.com/s?wd=14&ie=utf-8&cl=3&t=12&fr=news'
-        ret = self.enqueue_request(request)
-        value = 'https://www.baidu.com/s?wd=15&ie=utf-8&cl=3&t=12&fr=news'
-        request = Request(value, dont_filter)
-        ret = self.enqueue_request(request)
-        value = 'https://www.baidu.com/s?wd=16&ie=utf-8&cl=3&t=12&fr=news'
-        request = Request(value, dont_filter)
-        ret = self.enqueue_request(request)
-        value = 'http://www.baidu.com/6.html'
-        request = Request(value, dont_filter)
-        ret = self.enqueue_request(request)
-        value = 'http://www.baidu.com/7.html'
-        request = Request(value, dont_filter)
-        time.sleep(1)
-        ret = self.enqueue_request(request)
-        value = 'http://www.baidu.com/8.html'
-        request = Request(value, dont_filter)
-        ret = self.enqueue_request(request)
+        print "enqueue"
+        request = self.schedule_next_request()
+        if(request):
+            self.enqueue_request(request)
+        request1 = Request("http://www.baidu.com:80/a", False)
+        print "wwj debug before enqueue_request"
+        self.enqueue_request(request1)
+

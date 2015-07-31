@@ -1,0 +1,22 @@
+wwj debug in scrapy spider init
+-----------------------process--------------------- domainFilterMiddlerWare
+enqueue
+http://www.xuegita.com/cnche/070581.phtml
+wwj debug before enqueue_request
+wwj debug return my_cachingThreadedResolver
+wwj debug in spider start_request
+wwj debug ------------ False
+wwj debug------------- False
+it, Twisted can perform only rudimentary TLS client hostname verification.  Many valid certificate/hostname mappings may be rejected.
+2015-07-31 13:06:18 [scrapy] INFO: Scrapy 1.0.1 started (bot: scrapy_kernel)
+2015-07-31 13:06:18 [scrapy] INFO: Optional features available: ssl, http11
+2015-07-31 13:06:18 [scrapy] INFO: Overridden settings: {'DEPTH_LIMIT': '2', 'DOWNLOADER': 'my_downloader.My_Downloader', 'SPIDER_MODULES': ['scrapy_kernel.spiders'], 'BOT_NAME': 'scrapy_kernel', 'SCHEDULER': 'my_scheduler.my_Scheduler', 'DEPTH_PRIORITY': '1'}
+2015-07-31 13:06:18 [scrapy] INFO: Enabled extensions: CloseSpider, TelnetConsole, LogStats, CoreStats, SpiderState, SpiderController, result_handler
+2015-07-31 13:06:18 [scrapy_kernel.spiders.scrapy_spider] INFO: wwj debug in spider from_crawler
+2015-07-31 13:06:18 [scrapy] INFO: Received SIGINT, shutting down gracefully. Send again to force 
+2015-07-31 13:06:18 [scrapy] INFO: Enabled downloader middlewares: HttpAuthMiddleware, DownloadTimeoutMiddleware, RandomUserAgentMiddleware, RetryMiddleware, DefaultHeadersMiddleware, MetaRefreshMiddleware, HttpCompressionMiddleware, RedirectMiddleware, CookiesMiddleware, ChunkedTransferMiddleware, DownloaderStats
+2015-07-31 13:06:18 [scrapy] INFO: Enabled spider middlewares: HttpErrorMiddleware, OffsiteMiddleware, RefererMiddleware, UrlLengthMiddleware, DepthMiddleware
+2015-07-31 13:06:18 [scrapy] INFO: Enabled item pipelines: 
+2015-07-31 13:06:18 [scrapy] INFO: Spider opened
+2015-07-31 13:06:18 [scrapy] INFO: Crawled 0 pages (at 0 pages/min), scraped 0 items (at 0 items/min)
+2015-07-31 13:06:18 [scrapy] DEBUG: Telnet console listening on 127.0.0.1:6023

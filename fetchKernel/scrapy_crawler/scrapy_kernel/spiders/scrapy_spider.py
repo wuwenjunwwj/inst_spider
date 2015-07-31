@@ -9,8 +9,6 @@ from scrapy.selector import Selector
 import logging  
 from scrapy.http import Request
 from scrapy_kernel.items import HtmlItem  
-from scrapy_kernel.spiders.my_crawler import myCrawler  
-from scrapy_kernel.spiders.my_spidermanager import my_spiderManager  
 from scrapy_kernel.spiders.page_store import *  
 from scrapy.utils.misc import load_object
 FORMAT = '%(asctime)-15s'

@@ -30,6 +30,7 @@ runner = CrawlerRunner(settings)
 #### one runner, more spiders 
 spidercls = runner.spider_loader.load('scrapy_spider')
 my_crawler = runner._create_crawler(spidercls)
+
 my_crawler.spider = my_crawler._create_spider('scrapy_spider')
 my_crawler.engine = my_crawler._create_engine()
 
